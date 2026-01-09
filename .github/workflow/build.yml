@@ -5,15 +5,22 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+      
       - name: Install Python
         uses: actions/setup-python@v5
         with: { python-version: '3.12' }
+        
       - name: Build
         run: |
-          # Adicionado openpyxl aqui
-          pip install pandas pyautogui pyinstaller openpyxl
-          # Adicionado --hidden-import para garantir que o PyInstaller localize o motor do Excel
+          # Instalamos o nbconvert para transformar o notebook em script
+          pip install pandas pyautogui pyinstaller openpyxl nbconvert
+          
+          # 1. Converte o notebook para .py (certifique-se de que o nome do arquivo está correto)
+          jupyter nbconvert --to script relatorio.ipynb
+          
+          # 2. Gera o executável a partir do arquivo .py gerado
           pyinstaller --onefile --hidden-import=openpyxl relatorio.py
+          
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
