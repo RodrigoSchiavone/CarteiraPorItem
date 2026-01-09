@@ -12,13 +12,12 @@ jobs:
         
       - name: Build
         run: |
-          # Instalamos o nbconvert para transformar o notebook em script
           pip install pandas pyautogui pyinstaller openpyxl nbconvert
           
-          # 1. Converte o notebook para .py (certifique-se de que o nome do arquivo está correto)
-          jupyter nbconvert --to script relatorio.ipynb
+          # 1. Converte o notebook. Usamos aspas por causa do acento e --output para normalizar o nome
+          jupyter nbconvert --to script "relatório.ipynb" --output relatorio
           
-          # 2. Gera o executável a partir do arquivo .py gerado
+          # 2. Gera o executável a partir do 'relatorio.py' criado pelo comando acima
           pyinstaller --onefile --hidden-import=openpyxl relatorio.py
           
       - name: Upload Artifact
